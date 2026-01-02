@@ -17,7 +17,6 @@ class HashMap {
   getIndex(key) {
     let hash = this.hash(key);
     let index = Math.abs(hash) % this.buckets.length;
-    index = (index * 31) % this.buckets.length;
     return Math.floor(index);
   }
 
@@ -47,18 +46,28 @@ class HashMap {
 
   set(key, value) {
     let index = this.getIndex(key);
-    let bucket = this.bucket(key);
-    let entry = this.entry(bucket, key);
 
-    if (entry) {
-      entry.value = value;
+    if (this.buckets[index] === null) {
+      //Create first nide in bucket
+      this.buckets[index] = new Node(key, value);
+      this.occupiedFlags[index] = true;
+      this.size++;
     } else {
-      // Only increment occupied if this is the FIRST entry in a bucket
-      if (bucket.length === 0) {
-        this.occupiedFlags[index] = true;
+      //traverse linked list
+      let current = this.buckets[index];
+      let prev = null;
+
+      while (current) {
+        if (current.key === key) {
+          //update existing node
+          current.value = value;
+          return;
+        }
+        prev = current;
+        current = current.next;
       }
 
-      bucket.push({ key, value });
+      prev.next = new Node(key, value);
       this.size++;
     }
 
@@ -70,42 +79,57 @@ class HashMap {
   }
 
   get(key) {
-    let bucket = this.bucket(key);
-    let entry = this.entry(bucket, key);
+    let index = this.getIndex(key);
+    let current = this.buckets[index];
 
-    if (entry) {
-      return entry.value;
+    while (current) {
+      if (current.key === key) {
+        return current.value;
+      }
+      current = current.next;
     }
     return null;
   }
 
   has(key) {
-    let bucket = this.bucket(key);
-    let entry = this.entry(bucket, key);
-    return entry !== null;
+    let index = this.getIndex(key);
+    let current = this.buckets[index];
+
+    while (current) {
+      if (current.key == key) {
+        return true;
+      }
+      current = current.next;
+    }
+    return false;
   }
 
   remove(key) {
     let index = this.getIndex(key);
-    let bucket = this.bucket(key);
+    let current = this.buckets[index];
+    let prev = null;
 
-    if (!bucket) return false;
-
-    for (let i = 0; i < bucket.length; i++) {
-      if (bucket[i].key === key) {
-        bucket.splice(i, 1);
-        this.size--;
-
-        // If bucket becomes empty, update occupied flag
-        if (bucket.length === 0) {
-          this.occupiedFlags[index] = false;
+    while (current) {
+      if (current.key === key) {
+        if (prev === null) {
+          //Removing first node in bucket
+          this.buckets[index] = current.next;
+        } else {
+          prev.next = current.next;
         }
-
-        return true;
+        this.size--;
       }
+
+      //update occupied flag if bucket becomes empty
+      if (this.bucket[index] === null) {
+        this.occupiedFlags[index] = false;
+      }
+
+      return true;
     }
 
-    return false;
+    prev = current;
+    current = current.next;
   }
 
   length() {
@@ -123,8 +147,10 @@ class HashMap {
     const keys = [];
     for (let i = 0; i < this.buckets.length; i++) {
       if (this.occupiedFlags[i] && this.buckets[i]) {
-        for (let entry of this.buckets[i]) {
-          keys.push(entry.key);
+        let current = this.buckets[i];
+        while (current) {
+          keys.push(current.key);
+          current = current.next;
         }
       }
     }
@@ -135,8 +161,10 @@ class HashMap {
     const values = [];
     for (let i = 0; i < this.buckets.length; i++) {
       if (this.occupiedFlags[i] && this.buckets[i]) {
-        for (let entry of this.buckets[i]) {
-          values.push(entry.value);
+        let current = this.buckets[i];
+        while (current) {
+          values.push(current.value);
+          current = current.next;
         }
       }
     }
@@ -147,8 +175,10 @@ class HashMap {
     const entries = [];
     for (let i = 0; i < this.buckets.length; i++) {
       if (this.occupiedFlags[i] && this.buckets[i]) {
-        for (let entry of this.buckets[i]) {
-          entries.push([entry.key, entry.value]);
+        let current = this.buckets[i];
+        while (current) {
+          entries.push([current.key, current.value]);
+          current = current.next;
         }
       }
     }
@@ -168,8 +198,10 @@ class HashMap {
     // Rehash all entries
     for (let i = 0; i < oldBuckets.length; i++) {
       if (oldOccupiedFlags[i] && oldBuckets[i]) {
-        for (let entry of oldBuckets[i]) {
-          this.set(entry.key, entry.value);
+        let current = oldBuckets[i];
+        while (current) {
+          this.set(current.key, current.value);
+          current = current.next;
         }
       }
     }

@@ -34,7 +34,7 @@ test.set("egg", "beige");
 
 console.log("Total of key/value pairs: ", test.length());
 console.log("Value for 'apple': ", test.get("apple"));
-console.log("Has 'apple': ", test.has("apple"));
+console.log("Has 'frog': ", test.has("frog"));
 test.remove("apple");
 console.log("Remove 'apple'");
 console.log("Has 'apple': ", test.has("apple"));
