@@ -1,0 +1,53 @@
+const HashMap = require("./hashMap");
+
+const test = new HashMap();
+test.set("apple", "red");
+test.set("banana", "yellow");
+test.set("carrot", "orange");
+test.set("dog", "brown");
+test.set("elephant", "gray");
+test.set("frog", "green");
+test.set("grape", "purple");
+test.set("hat", "black");
+test.set("ice cream", "white");
+test.set("jacket", "blue");
+test.set("kite", "pink");
+test.set("tree", "chestnut");
+test.set("sky", "golden");
+test.set("lion", "golden");
+test.set("moon", "silver");
+test.set("notebook", "tan");
+test.set("ocean", "navy");
+test.set("pear", "green");
+test.set("quilt", "patchwork");
+test.set("rainbow", "multicolor");
+test.set("sun", "yellow");
+test.set("tiger", "striped");
+test.set("table", "oak");
+test.set("shirt", "dotted");
+test.set("backpack", "plaid");
+test.set("can", "sinopia");
+test.set("shoes", "wenge");
+test.set("egg", "beige");
+
+/*---TESTS---*/
+
+console.log("Total of key/value pairs: ", test.length());
+console.log("Value for 'apple': ", test.get("apple"));
+console.log("Has 'apple': ", test.has("apple"));
+test.remove("apple");
+console.log("Remove 'apple'");
+console.log("Has 'apple': ", test.has("apple"));
+console.log("Total of key/value pairs: ", test.length());
+console.log("KEYS:");
+console.log(test.keys());
+console.log("VALUES:");
+console.log(test.values());
+console.log("ENTRIES:");
+console.log(test.entries());
+test.clear();
+console.log("CLEAR ALL ENTRIES");
+console.log("ENTRIES:");
+console.log(test.entries());
+console.log("Has 'can': ", test.has("can"));
+console.log("Total of key/value pairs: ", test.length());
