@@ -20,30 +20,6 @@ class HashMap {
     return Math.floor(index);
   }
 
-  bucket(key) {
-    let index = this.getIndex(key);
-
-    // Initialize if null
-    if (this.buckets[index] === null) {
-      this.buckets[index] = [];
-    }
-
-    return this.buckets[index];
-  }
-
-  entry(bucket, key) {
-    if (!bucket || !Array.isArray(bucket)) {
-      return null;
-    }
-
-    for (let e of bucket) {
-      if (e.key === key) {
-        return e;
-      }
-    }
-    return null;
-  }
-
   set(key, value) {
     let index = this.getIndex(key);
 
