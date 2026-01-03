@@ -181,6 +181,7 @@ The test suite:
 
 ## Project Structure
 
+```text
 HashMap/
 ├── hashMap.js # Main HashMap implementation
 ├── hashSet.js # HashSet implementation (extra credit)
@@ -189,6 +190,7 @@ HashMap/
 ├── package.json # Dependencies and metadata
 ├── README.md # This documentation
 └── .gitignore # Git ignore file (recommended)
+```
 
 ## Design Decisions
 
