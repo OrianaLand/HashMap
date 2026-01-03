@@ -118,18 +118,17 @@ class HashMap {
           prev.next = current.next;
         }
         this.size--;
-      }
+        //update occupied flag if bucket becomes empty
+        if (this.buckets[index] === null) {
+          this.occupiedFlags[index] = false;
+        }
 
-      //update occupied flag if bucket becomes empty
-      if (this.bucket[index] === null) {
-        this.occupiedFlags[index] = false;
+        return true; //Key found. Key/pair removed
       }
-
-      return true;
+      prev = current;
+      current = current.next;
     }
-
-    prev = current;
-    current = current.next;
+    return false; //key not found
   }
 
   length() {
